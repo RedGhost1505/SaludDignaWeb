@@ -12,20 +12,20 @@ const AppRoutes = () => {
   const groupedRoutes = groupRoutesByPermission(protectedRoutes);
   
   // Validación adicional del token
-  // const hasValidToken = () => {
-  //   try {
-  //     const token = localStorage.getItem('token');
-  //     return !!token && !!localStorage.getItem('decoded');
-  //   } catch (error) {
-  //     console.error('Error validating token:', error);
-  //     return false;
-  //   }
-  // };
+  const hasValidToken = () => {
+    try {
+      const token = localStorage.getItem('token');
+      return !!token && !!localStorage.getItem('decoded');
+    } catch (error) {
+      console.error('Error validating token:', error);
+      return false;
+    }
+  };
 
-  // if (!hasValidToken() && isAuthenticated) {
-  //   localStorage.clear(); // Limpiar datos inválidos
-  //   return <Navigate to="/" replace />;
-  // }
+  if (!hasValidToken() && isAuthenticated) {
+    localStorage.clear(); // Limpiar datos inválidos
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <Routes>
