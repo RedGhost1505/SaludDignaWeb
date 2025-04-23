@@ -1,38 +1,42 @@
 import React from "react";
-import GridShape from "../../components/common/GridShape";
 import { Link } from "react-router";
 import ThemeTogglerTwo from "../../components/common/ThemeTogglerTwo";
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AuthLayout({ children }: {children: React.ReactNode;}) {
   return (
-    <div className="relative p-6 bg-white z-1 dark:bg-gray-900 sm:p-0">
-      <div className="relative flex flex-col justify-center w-full h-screen lg:flex-row dark:bg-gray-900 sm:p-0">
+    <div className="min-h-screen bg-[#f8fae1] flex flex-col">
+      <div className="flex flex-1 flex-col lg:flex-row">
         {children}
-        <div className="items-center hidden w-full h-full lg:w-1/2 bg-brand-950 dark:bg-white/5 lg:grid">
-          <div className="relative flex items-center justify-center z-1">
-            {/* <!-- ===== Common Grid Shape Start ===== --> */}
-            <GridShape />
-            <div className="flex flex-col items-center max-w-xs">
-              <Link to="/" className="block mb-4">
+        <div className="items-center hidden w-full lg:w-1/2 bg-[#009975] lg:flex">
+          <div className="relative w-full flex items-center justify-center">
+            {/* Decorative circles */}
+            <div 
+              className="absolute bottom-[-50px] left-[-100px] w-72 h-72 bg-[#e98232] rounded-full opacity-20"
+              aria-hidden="true"
+            />
+            <div 
+              className="absolute top-[-150px] right-[0px] w-96 h-72 bg-[#b4e082] rounded-full opacity-20"
+              aria-hidden="true"
+            />
+            
+            <div className="flex flex-col items-center justify-center max-w-xs relative z-10 py-12">
+              <Link to="/" className="block mb-8">
                 <img
                   width={231}
                   height={48}
                   src="/images/logo/auth-logo.svg"
-                  alt="Logo"
+                  alt="SaludDigna Logo"
+                  className="w-48"
                 />
               </Link>
-              <p className="text-center text-gray-400 dark:text-white/60">
-                Free and Open-Source Tailwind CSS Admin Dashboard Template
+              <h2 className="text-3xl font-bold text-white mb-4 text-center">
+                Bienvenido a SaludDigna
+              </h2>
+              <p className="text-center text-white/80">
+                Plataforma médica avanzada para la visualización y manipulación de estudios radiológicos
               </p>
             </div>
           </div>
-        </div>
-        <div className="fixed z-50 hidden bottom-6 right-6 sm:block">
-          <ThemeTogglerTwo />
         </div>
       </div>
     </div>
