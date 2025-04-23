@@ -1,14 +1,27 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const LogIn = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const tokenData = {email: "test@gmail.com", roles_id: [1], acces_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"}
+  const decodedToken = { 
+    email: "test@gmail.com",
+    nombre: "Iñigo",
+    apellidos: "Quintana Delgadillo",
+    roles_id: 1
+  }
 
   const handleLogin = (e) => {
     e.preventDefault();
     // Simulamos un login sencillo
     if (email === "test@gmail.com" && password === "123") {
-      alert("¡Login exitoso!");
+      localStorage.setItem('decoded', JSON.stringify(decodedToken));
+      localStorage.setItem('token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9");
+      localStorage.setItem('tokenData', JSON.stringify(tokenData));
+      navigate('/logout');
     } else {
       alert("Correo o contraseña incorrectos");
     }
