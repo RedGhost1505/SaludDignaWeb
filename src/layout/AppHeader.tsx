@@ -20,7 +20,7 @@ const AppHeader: React.FC = () => {
   };
 
   const handleSearchClick = () => {
-    navigate("/login")
+    navigate("/search-patient")
   };
 
   const toggleApplicationMenu = () => {
