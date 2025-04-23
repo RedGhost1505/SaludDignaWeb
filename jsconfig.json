@@ -1,22 +1,12 @@
 {
-    "compilerOptions": {
-        "target": "ESNext",
-        "module": "ESNext",
-        "moduleResolution": "Bundler",
-        "skipLibCheck": true,
-
-        // Paths
-        "baseUrl": "src/",
-        "paths": {
-            "@pages/*": [
-                "pages/*",
-            ],
-            "@components/*": [
-                "components/*",
-            ],
-            "@assets/*": [
-                "assets/*",
-            ],
-        }
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "skipLibCheck": true,
+    "baseUrl": ".", 
+    "paths": {
+      "@/*": ["src/*"]
     }
+  }
 }

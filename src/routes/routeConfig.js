@@ -1,5 +1,5 @@
-import LogIn from "@pages/AuthPages/LogIn";
-import Logout from "@pages/AuthPages/Logout";
+import LogIn from "@/pages/AuthPages/LogIn";
+import Logout from "@/pages/AuthPages/Logout";
 
 export const ROLES = {
 	ADMIN: 1,
