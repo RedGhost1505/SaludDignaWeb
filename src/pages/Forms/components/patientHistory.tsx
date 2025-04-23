@@ -1,6 +1,14 @@
+import { useState } from "react";
 import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
+import TomographyView from "./tomographyView";
 
 export default function PatientHistory({ patient, onBack }) {
+    const [selectedTomography, setSelectedTomography] = useState(null);
+
+    if (selectedTomography) {
+        return <TomographyView tomography={selectedTomography} onBack={() => setSelectedTomography(null)} />;
+    }
+
     return (
         <div>
             <button
@@ -45,29 +53,45 @@ export default function PatientHistory({ patient, onBack }) {
                 </div>
 
                 <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
-                    <h3 className="font-medium text-lg mb-4">Sus tomografías</h3>
+                    <h3 className="font-medium text-lg mb-4">Sus estudios</h3>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+                        <div
+                            className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-lg hover:border-emerald-500 transition duration-200 cursor-pointer"
+                            onClick={() => setSelectedTomography({ title: "Tomografía Craneal", date: "23/04/2025", description: "Evaluación inicial del cráneo para descartar anomalías." })}
+                        >
                             <img src="public/images/Tomography.jpg" alt="Tomografía 1" className="w-full h-60 object-cover rounded-md mb-2" />
+                            <p className="text-sm mt-1 text-gray-500">Fecha: 23/04/2025</p>
                             <h4 className="font-medium">Tomografía Craneal</h4>
                             <p className="text-sm mt-1">Evaluación inicial del cráneo para descartar anomalías.</p>
                         </div>
 
-                        <div className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+                        <div
+                            className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-lg hover:border-emerald-500 transition duration-200 cursor-pointer"
+                            onClick={() => setSelectedTomography({ title: "Tomografía de Senos Paranasales", date: "23/04/2025", description: "Revisión detallada de los senos paranasales." })}
+                        >
                             <img src="public/images/Tomography.jpg" alt="Tomografía 2" className="w-full h-60 object-cover rounded-md mb-2" />
+                            <p className="text-sm mt-1 text-gray-500">Fecha: 23/04/2025</p>
                             <h4 className="font-medium">Tomografía de Senos Paranasales</h4>
                             <p className="text-sm mt-1">Revisión detallada de los senos paranasales.</p>
                         </div>
 
-                        <div className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+                        <div
+                            className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-lg hover:border-emerald-500 transition duration-200 cursor-pointer"
+                            onClick={() => setSelectedTomography({ title: "Tomografía de Tejidos Blandos", date: "23/04/2025", description: "Análisis de tejidos blandos en la región craneal." })}
+                        >
                             <img src="public/images/Tomography.jpg" alt="Tomografía 3" className="w-full h-60 object-cover rounded-md mb-2" />
+                            <p className="text-sm mt-1 text-gray-500">Fecha: 23/04/2025</p>
                             <h4 className="font-medium">Tomografía de Tejidos Blandos</h4>
                             <p className="text-sm mt-1">Análisis de tejidos blandos en la región craneal.</p>
                         </div>
 
-                        <div className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+                        <div
+                            className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-lg hover:border-emerald-500 transition duration-200 cursor-pointer"
+                            onClick={() => setSelectedTomography({ title: "Tomografía de Diagnóstico General", date: "23/04/2025", description: "Exploración general para diagnóstico inicial." })}
+                        >
                             <img src="public/images/Tomography.jpg" alt="Tomografía 4" className="w-full h-60 object-cover rounded-md mb-2" />
+                            <p className="text-sm mt-1 text-gray-500">Fecha: 23/04/2025</p>
                             <h4 className="font-medium">Tomografía de Diagnóstico General</h4>
                             <p className="text-sm mt-1">Exploración general para diagnóstico inicial.</p>
                         </div>
