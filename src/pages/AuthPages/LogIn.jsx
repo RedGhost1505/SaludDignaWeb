@@ -1,10 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
+import {
+  Flex,
+  Box,
+  Heading,
+  Input,
+  Button,
+  VStack,
+  Alert
+} from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/toast";
+import { AlertIcon } from "@chakra-ui/alert";
+import { FormControl } from "@chakra-ui/form-control";
+
 const LogIn = () => {
   const navigate = useNavigate();
+  const toast = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const tokenData = {email: "test@gmail.com", roles_id: [1], acces_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"}
   const decodedToken = { 
@@ -23,46 +38,102 @@ const LogIn = () => {
       localStorage.setItem('tokenData', JSON.stringify(tokenData));
       navigate('/logout');
     } else {
-      alert("Correo o contraseña incorrectos");
+      console.log("Correo o contraseña incorrectos");
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-800 to-gray-900">
-      <div className="w-full max-w-md p-8 space-y-8">
-        <h1 className="text-4xl font-bold text-white text-center tracking-wider">
+    <Flex
+      direction="column"
+      align="center"
+      justify="center"
+      minH="100vh"
+      bgGradient="linear(to-b, gray.800, gray.900)"
+    >
+      <Box maxW="md" w="full" p={8}>
+        <Heading
+          as="h1"
+          size="2xl"
+          color="white"
+          textAlign="center"
+          mb={8}
+          fontWeight="bold"
+          letterSpacing="wider"
+        >
           Log In
-        </h1>
-        <form onSubmit={handleLogin} className="space-y-6 bg-white/10 backdrop-blur-sm p-8 rounded-xl shadow-2xl">
-          <div className="space-y-2">
-            <input
-              type="email"
-              placeholder="Correo electrónico"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <input
-              type="password"
-              placeholder="Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-              required
-            />
-          </div>
-          <button
+        </Heading>
+
+        <VStack
+          as="form"
+          onSubmit={handleLogin}
+          spacing={6}
+          bg="whiteAlpha.100"
+          backdropFilter="blur(4px)"
+          p={8}
+          borderRadius="xl"
+          boxShadow="2xl"
+        >
+          {error && (
+            <Alert status="error" borderRadius="md">
+              <AlertIcon />
+              {error}
+            </Alert>
+          )}
+
+          <FormControl>
+            <VStack spacing={2} w="full">
+              <Input
+                type="email"
+                placeholder="Correo electrónico"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                bg="gray.100"
+                borderColor="gray.300"
+                _focus={{
+                  borderColor: "blue.500",
+                  boxShadow: "none",
+                  ring: "2px",
+                  ringColor: "blue.500",
+                }}
+                required
+              />
+            </VStack>
+          </FormControl>
+
+          <FormControl>
+            <VStack spacing={2} w="full">
+              <Input
+                type="password"
+                placeholder="Contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                bg="gray.100"
+                borderColor="gray.300"
+                _focus={{
+                  borderColor: "blue.500",
+                  boxShadow: "none",
+                  ring: "2px",
+                  ringColor: "blue.500",
+                }}
+                required
+              />
+            </VStack>
+          </FormControl>
+
+          <Button
             type="submit"
-            className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-200 transform hover:scale-105 active:scale-95"
+            w="full"
+            colorScheme="blue"
+            size="lg"
+            _hover={{ transform: "scale(1.05)" }}
+            _active={{ transform: "scale(0.95)" }}
+            transition="all 0.2s"
           >
             Iniciar sesión
-          </button>
-        </form>
-      </div>
-    </div>
+          </Button>
+        </VStack>
+      </Box>
+    </Flex>
   );
 };
 
