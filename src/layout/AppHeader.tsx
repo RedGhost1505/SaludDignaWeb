@@ -138,7 +138,7 @@ const AppHeader: React.FC = () => {
                   fill="currentColor"
                 />
               </svg>
-              <span>Buscar</span>
+              <span>Buscar pacientes</span>
             </button>
           </div>
           
