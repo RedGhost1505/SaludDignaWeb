@@ -18,6 +18,12 @@ interface ImageData {
     id: string;
 }
 
+interface Line {
+    start: { x: number; y: number };
+    end: { x: number; y: number };
+    measurement: string;
+}
+
 // Nuevo tipo para ajustes de visualización
 interface ViewSettings {
     contrast: number;
@@ -32,6 +38,7 @@ export default function TomographyView({ tomography, onBack }: TomographyProps) 
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [showTools, setShowTools] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [lines, setLines] = useState<Line[]>([]);
     // Ahora usamos un objeto para los ajustes de visualización
     const [viewSettings, setViewSettings] = useState<ViewSettings>({
         contrast: 100,
@@ -45,6 +52,129 @@ export default function TomographyView({ tomography, onBack }: TomographyProps) 
     const scrollTimeout = useRef<number | null>(null);
     const isFetching = useRef<boolean>(false);
     const apiUrl = useRef<string>("https://backendhackaton-production.up.railway.app/api/studies/ee44d1f7-6fd75bcb-ae051007-677351ca-759382ea/images");
+
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const [drawing, setDrawing] = useState(false);
+    const [startPoint, setStartPoint] = useState<{ x: number; y: number } | null>(null);
+    const [endPoint, setEndPoint] = useState<{ x: number; y: number } | null>(null);
+
+    const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        setStartPoint({
+            x: (e.clientX - rect.left) * scaleX,
+            y: (e.clientY - rect.top) * scaleY,
+        });
+        setDrawing(true);
+    };
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        if (!drawing || !startPoint) return;
+
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        const currentEndPoint = {
+            x: (e.clientX - rect.left) * scaleX,
+            y: (e.clientY - rect.top) * scaleY,
+        };
+        setEndPoint(currentEndPoint);
+
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Redibujar todas las líneas existentes
+            lines.forEach((line) => {
+                ctx.beginPath();
+                ctx.moveTo(line.start.x, line.start.y);
+                ctx.lineTo(line.end.x, line.end.y);
+                ctx.strokeStyle = "red";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+
+            // Dibujar la línea actual
+            ctx.beginPath();
+            ctx.moveTo(startPoint.x, startPoint.y);
+            ctx.lineTo(currentEndPoint.x, currentEndPoint.y);
+            ctx.strokeStyle = "blue";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+    };
+
+    const handleMouseUp = () => {
+        if (startPoint && endPoint) {
+            setLines((prevLines) => [
+                ...prevLines,
+                { start: startPoint, end: endPoint, measurement: "" },
+            ]);
+        }
+        setStartPoint(null);
+        setEndPoint(null);
+        setDrawing(false);
+    };
+
+    const updateMeasurement = (index: number, value: string) => {
+        setLines((prevLines) =>
+            prevLines.map((line, i) =>
+                i === index ? { ...line, measurement: value } : line
+            )
+        );
+    };
+
+    const clearCanvas = () => {
+        const canvas = canvasRef.current;
+        if (canvas) {
+            const ctx = canvas.getContext("2d");
+            if (ctx) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+        setLines([]);
+    };
+
+    const saveImageWithMeasurements = () => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        // Dibujar todas las líneas en el canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        lines.forEach((line) => {
+            ctx.beginPath();
+            ctx.moveTo(line.start.x, line.start.y);
+            ctx.lineTo(line.end.x, line.end.y);
+            ctx.strokeStyle = "red";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Añadir la medición como texto
+            const midX = (line.start.x + line.end.x) / 2;
+            const midY = (line.start.y + line.end.y) / 2;
+            ctx.fillStyle = "white";
+            ctx.font = "14px Arial";
+            ctx.fillText(line.measurement || "Sin medida", midX, midY);
+        });
+
+        // Crear un enlace para descargar la imagen
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = `tomography_with_measurements.png`;
+        link.click();
+    };
 
     // Función para precargar imágenes de manera eficiente
     const preloadImages = useCallback((centerIndex: number, range: number = 3) => {
@@ -480,19 +610,60 @@ export default function TomographyView({ tomography, onBack }: TomographyProps) 
                 <Modal isOpen={isModalOpen} onClose={closeModal} className="max-w-4xl p-6">
                     <div className="flex flex-col items-center">
                         <h2 className="text-lg font-bold mb-4">Crear mediciones</h2>
-                        {images[currentIndex] && (
-                            <img
-                                src={images[currentIndex]}
-                                alt={`Tomografía ${currentIndex + 1}`}
-                                className="max-h-[70vh] max-w-full object-contain rounded-lg shadow-lg"
+                        <div className="relative">
+                            {images[currentIndex] && (
+                                <img
+                                    src={images[currentIndex]}
+                                    alt={`Tomografía ${currentIndex + 1}`}
+                                    className="max-h-[70vh] max-w-full object-contain rounded-lg shadow-lg"
+                                />
+                            )}
+                            <canvas
+                                ref={canvasRef}
+                                width={800}
+                                height={600}
+                                className="absolute top-0 left-0 w-full h-full"
+                                onMouseDown={handleMouseDown}
+                                onMouseMove={handleMouseMove}
+                                onMouseUp={handleMouseUp}
                             />
-                        )}
-                        <button
-                            onClick={closeModal}
-                            className="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-medium"
-                        >
-                            Cerrar
-                        </button>
+                        </div>
+                        <div className="mt-4 w-full">
+                            {lines.map((line, index) => (
+                                <div key={index} className="flex items-center space-x-4 mb-2">
+                                    <p className="text-sm text-gray-300">
+                                        Línea {index + 1}: ({line.start.x.toFixed(1)}, {line.start.y.toFixed(1)}) → ({line.end.x.toFixed(1)}, {line.end.y.toFixed(1)})
+                                    </p>
+                                    <input
+                                        type="text"
+                                        value={line.measurement}
+                                        onChange={(e) => updateMeasurement(index, e.target.value)}
+                                        placeholder="Medición"
+                                        className="px-2 py-1 rounded bg-gray-700 text-white"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                        <div className="mt-4 flex space-x-4">
+                            <button
+                                onClick={clearCanvas}
+                                className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition font-medium"
+                            >
+                                Limpiar
+                            </button>
+                            <button
+                                onClick={saveImageWithMeasurements}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+                            >
+                                Guardar
+                            </button>
+                            <button
+                                onClick={closeModal}
+                                className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-medium"
+                            >
+                                Cerrar
+                            </button>
+                        </div>
                     </div>
                 </Modal>
 
