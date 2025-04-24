@@ -34,7 +34,10 @@ const navItems: NavItem[] = [
   {
     name: "Tus pacientes",
     icon: <ListIcon />,
-    subItems: [{ name: "Historial de pacientes", path: "/form-elements", pro: false }],
+    subItems: [
+      { name: "Historial de pacientes", path: "/form-elements", pro: false },
+      { name: "Alta de reporte", path: "/new-report", pro: false }
+    ],
   },
 ];
 
@@ -42,7 +45,7 @@ const othersItems: NavItem[] = [
   {
     icon: <Bot />,
     name: "AI Assistant",
-    path: "/avatars",
+    path: "/ChatBot",
   },
 ];
 

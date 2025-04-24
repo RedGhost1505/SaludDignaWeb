@@ -20,7 +20,7 @@ const AppHeader: React.FC = () => {
   };
 
   const handleSearchClick = () => {
-    navigate("/login")
+    navigate("/search-patient")
   };
 
   const toggleApplicationMenu = () => {
@@ -138,7 +138,7 @@ const AppHeader: React.FC = () => {
                   fill="currentColor"
                 />
               </svg>
-              <span>Buscar</span>
+              <span>Buscar pacientes</span>
             </button>
           </div>
           
