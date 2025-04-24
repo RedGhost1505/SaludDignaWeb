@@ -32,6 +32,13 @@ export default function TomographyView({ tomography, onBack }) {
         }
     };
 
+    const handleDownload = (format) => {
+        const link = document.createElement("a");
+        link.href = images[currentIndex];
+        link.download = `tomography-image.${format}`;
+        link.click();
+    };
+
     return (
         <div
             className="min-h-screen bg-black text-white flex flex-col items-center justify-center"
@@ -46,9 +53,28 @@ export default function TomographyView({ tomography, onBack }) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
             </button>
-            <h1 className="text-3xl font-bold mb-4">{tomography.title}</h1>
-            <p className="text-sm mb-2">Fecha: {tomography.date}</p>
-            <p className="text-lg mb-6">{tomography.description}</p>
+            <div className="w-full px-6 mb-4">
+                <div className="flex justify-between items-center ">
+                    <h1 className="text-3xl font-bold mb-2">{tomography.title}</h1>
+                    <div className="flex space-x-2">
+                        <button
+                            onClick={() => handleDownload("jpg")}
+                            className="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition"
+                        >
+                            Guardar JPG
+                        </button>
+                        <button
+                            onClick={() => handleDownload("png")}
+                            className="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition"
+                        >
+                            Guardar PNG
+                        </button>
+                    </div>
+                </div>
+                <p className="text-sm mb-1 text-gray-400">Fecha: {tomography.date}</p>
+                <p className="text-lg mb-6 text-gray-300">{tomography.description}</p>
+
+            </div>
             {loading ? (
                 <p className="text-lg">Cargando imágenes...</p>
             ) : (
