@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
+import { Modal } from "../../../components/ui/modal";
 
 // Definimos interfaces para TypeScript
 interface TomographyProps {
@@ -30,6 +31,7 @@ export default function TomographyView({ tomography, onBack }: TomographyProps) 
     const [loading, setLoading] = useState<boolean>(true);
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [showTools, setShowTools] = useState<boolean>(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     // Ahora usamos un objeto para los ajustes de visualización
     const [viewSettings, setViewSettings] = useState<ViewSettings>({
         contrast: 100,
@@ -171,7 +173,11 @@ export default function TomographyView({ tomography, onBack }: TomographyProps) 
     };
 
     const handleCreateLine = () => {
-        alert("Create line functionality not implemented yet.");
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
     };
 
     // Genera el CSS para los filtros de imagen
@@ -469,6 +475,26 @@ export default function TomographyView({ tomography, onBack }: TomographyProps) 
                         </div>
                     </div>
                 )}
+
+                {/* Modal para crear mediciones */}
+                <Modal isOpen={isModalOpen} onClose={closeModal} className="max-w-4xl p-6">
+                    <div className="flex flex-col items-center">
+                        <h2 className="text-lg font-bold mb-4">Crear mediciones</h2>
+                        {images[currentIndex] && (
+                            <img
+                                src={images[currentIndex]}
+                                alt={`Tomografía ${currentIndex + 1}`}
+                                className="max-h-[70vh] max-w-full object-contain rounded-lg shadow-lg"
+                            />
+                        )}
+                        <button
+                            onClick={closeModal}
+                            className="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-medium"
+                        >
+                            Cerrar
+                        </button>
+                    </div>
+                </Modal>
 
                 {/* Navegación de imágenes */}
                 {images.length > 0 && (
