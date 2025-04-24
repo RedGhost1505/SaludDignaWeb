@@ -74,7 +74,7 @@ export default function TomographyView({ tomography, onBack }: TomographyProps) 
             } else if (deltaY < 0 && currentIndex > 0) {
                 setCurrentIndex(prevIndex => prevIndex - 1);
             }
-        }, 60); // Tiempo de debounce muy reducido para mejor respuesta
+        }, 10); // Tiempo de debounce muy reducido para mejor respuesta
     }, [currentIndex, images.length]);
 
     // Navegación con botones
