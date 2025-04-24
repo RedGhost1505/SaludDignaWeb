@@ -182,7 +182,7 @@ export default function TomographyView({ tomography, onBack }: TomographyProps) 
 
     return (
         <div
-            className="bg-gray-900 text-white flex flex-col h-full"
+            className="bg-gray-900 text-white flex flex-col h-full rounded-xl shadow-lg"
             style={{ overflow: "hidden" }}
             onWheel={handleScroll}
         >
