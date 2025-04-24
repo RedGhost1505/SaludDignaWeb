@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
+import { DrawingCanvas } from "./DrawingCanvas";
 
 // Definimos interfaces para TypeScript
 interface TomographyProps {
@@ -30,6 +31,7 @@ export default function TomographyView({ tomography, onBack }: TomographyProps) 
   const [loading, setLoading] = useState<boolean>(true);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [showTools, setShowTools] = useState<boolean>(false);
+	const [showDrawing, setShowDrawing] = useState(false);
   // Ahora usamos un objeto para los ajustes de visualización
   const [viewSettings, setViewSettings] = useState<ViewSettings>({
     contrast: 100,
@@ -167,7 +169,16 @@ export default function TomographyView({ tomography, onBack }: TomographyProps) 
   };
 
   const handleAddNote = () => {
-    alert("Add note functionality not implemented yet.");
+    setShowDrawing(true);
+  };
+
+	const handleSaveDrawing = (canvas: HTMLCanvasElement) => {
+    const imageData = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = imageData;
+    link.download = `tomography-annotation-${currentIndex}.png`;
+    link.click();
+    setShowDrawing(false);
   };
 
   const handleCreateLine = () => {
@@ -499,6 +510,14 @@ export default function TomographyView({ tomography, onBack }: TomographyProps) 
           </div>
         )}
       </div>
+
+			{showDrawing && (
+        <DrawingCanvas
+          imageUrl={images[currentIndex]}
+          onSave={handleSaveDrawing}
+          onClose={() => setShowDrawing(false)}
+        />
+      )}
     </div>
   );
 }
