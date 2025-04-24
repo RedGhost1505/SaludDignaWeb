@@ -17,13 +17,26 @@ interface ImageData {
   id: string;
 }
 
+// Nuevo tipo para ajustes de visualización
+interface ViewSettings {
+  contrast: number;
+  brightness: number;
+  scale: number;
+  invert: boolean;
+}
+
 export default function TomographyView({ tomography, onBack }: TomographyProps) {
   const [images, setImages] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [contrast, setContrast] = useState<number>(100);
-  const [scale, setScale] = useState<number>(1);
   const [showTools, setShowTools] = useState<boolean>(false);
+  // Ahora usamos un objeto para los ajustes de visualización
+  const [viewSettings, setViewSettings] = useState<ViewSettings>({
+    contrast: 100,
+    brightness: 100,
+    scale: 1,
+    invert: false
+  });
   
   // Referencias para optimización
   const imagesCache = useRef<Record<number, HTMLImageElement>>({});
@@ -135,12 +148,22 @@ export default function TomographyView({ tomography, onBack }: TomographyProps) 
     document.body.removeChild(link);
   };
 
-  const handleContrastChange = () => {
-    setContrast((prev) => (prev === 100 ? 150 : 100));
+  // Manejadores para los ajustes de visualización
+  const handleSettingChange = (setting: keyof ViewSettings, value: number | boolean) => {
+    setViewSettings(prev => ({
+      ...prev,
+      [setting]: value
+    }));
   };
 
-  const handleResize = () => {
-    setScale((prev) => (prev === 1 ? 1.5 : 1));
+  // Reset de todos los ajustes de visualización
+  const handleResetSettings = () => {
+    setViewSettings({
+      contrast: 100,
+      brightness: 100,
+      scale: 1,
+      invert: false
+    });
   };
 
   const handleAddNote = () => {
@@ -151,9 +174,15 @@ export default function TomographyView({ tomography, onBack }: TomographyProps) 
     alert("Create line functionality not implemented yet.");
   };
 
+  // Genera el CSS para los filtros de imagen
+  const getImageFilters = () => {
+    const { contrast, brightness, invert } = viewSettings;
+    return `contrast(${contrast}%) brightness(${brightness}%) ${invert ? 'invert(100%)' : ''}`;
+  };
+
   return (
     <div
-      className="bg-gray-900 text-white flex flex-col"
+      className="bg-gray-900 text-white flex flex-col h-full"
       style={{ overflow: "hidden" }}
       onWheel={handleScroll}
     >
@@ -211,8 +240,8 @@ export default function TomographyView({ tomography, onBack }: TomographyProps) 
               alt={`Tomografía ${currentIndex + 1}`}
               className="max-h-full max-w-full object-contain rounded-lg shadow-lg transition-transform duration-300 ease-in-out"
               style={{ 
-                filter: `contrast(${contrast}%)`, 
-                transform: `scale(${scale})` 
+                filter: getImageFilters(), 
+                transform: `scale(${viewSettings.scale})` 
               }}
             />
           ) : (
@@ -241,78 +270,202 @@ export default function TomographyView({ tomography, onBack }: TomographyProps) 
           </svg>
         </button>
         
-        {/* Panel flotante de herramientas */}
+        {/* Panel flotante de herramientas mejorado */}
         {showTools && (
-          <div className="absolute bottom-24 right-6 w-64 bg-gray-800 text-white rounded-lg shadow-xl p-4 z-10 animate-fade-in">
-            <div className="flex flex-row items-center gap-4 mb-4">
+          <div className="absolute bottom-24 right-6 w-80 bg-gray-800 text-white rounded-lg shadow-xl p-4 z-10 animate-fade-in">
+            <div className="flex flex-row items-center gap-2 mb-4">
               <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
               </div>
-              <h3 className="text-lg font-bold">Tus herramientas</h3>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold">Herramientas de visualización</h3>
+              </div>
+              <button
+                onClick={handleResetSettings}
+                className="text-xs px-2 py-1 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition"
+              >
+                Restablecer
+              </button>
             </div>
-            <div className="flex flex-col space-y-3">
-              <button
-                onClick={handleContrastChange}
-                className="flex items-center px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 mr-2 text-emerald-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+
+            {/* Control de contraste profesional con slider */}
+            <div className="mb-4">
+              <div className="flex justify-between mb-1">
+                <label className="text-sm text-gray-300 flex items-center">
+                  <svg className="h-4 w-4 mr-1 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                  </svg>
+                  Contraste
+                </label>
+                <span className="text-xs font-mono bg-gray-700 px-2 py-0.5 rounded">
+                  {viewSettings.contrast}%
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => handleSettingChange('contrast', Math.max(50, viewSettings.contrast - 10))}
+                  className="p-1 bg-gray-700 rounded"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v18m9-9H3" />
-                </svg>
-                Cambiar contraste
-              </button>
-              <button
-                onClick={handleResize}
-                className="flex items-center px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 mr-2 text-emerald-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                  </svg>
+                </button>
+                <input
+                  type="range"
+                  min="50"
+                  max="200"
+                  step="1"
+                  value={viewSettings.contrast}
+                  onChange={(e) => handleSettingChange('contrast', parseInt(e.target.value))}
+                  className="flex-1 accent-emerald-500 h-2 bg-gray-700 rounded appearance-none"
+                />
+                <button 
+                  onClick={() => handleSettingChange('contrast', Math.min(200, viewSettings.contrast + 10))}
+                  className="p-1 bg-gray-700 rounded"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8v12h12M16 4h4v4" />
-                </svg>
-                Redimensionar imagen
-              </button>
-              <button
-                onClick={handleAddNote}
-                className="flex items-center px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 mr-2 text-emerald-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12M6 12h12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Control de brillo */}
+            <div className="mb-4">
+              <div className="flex justify-between mb-1">
+                <label className="text-sm text-gray-300 flex items-center">
+                  <svg className="h-4 w-4 mr-1 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                  Brillo
+                </label>
+                <span className="text-xs font-mono bg-gray-700 px-2 py-0.5 rounded">
+                  {viewSettings.brightness}%
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => handleSettingChange('brightness', Math.max(50, viewSettings.brightness - 10))}
+                  className="p-1 bg-gray-700 rounded"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                Realizar notas
-              </button>
-              <button
-                onClick={handleCreateLine}
-                className="flex items-center px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 mr-2 text-emerald-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                  </svg>
+                </button>
+                <input
+                  type="range"
+                  min="50"
+                  max="200"
+                  step="1"
+                  value={viewSettings.brightness}
+                  onChange={(e) => handleSettingChange('brightness', parseInt(e.target.value))}
+                  className="flex-1 accent-emerald-500 h-2 bg-gray-700 rounded appearance-none"
+                />
+                <button 
+                  onClick={() => handleSettingChange('brightness', Math.min(200, viewSettings.brightness + 10))}
+                  className="p-1 bg-gray-700 rounded"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12M6 12h12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Control de zoom/escala */}
+            <div className="mb-4">
+              <div className="flex justify-between mb-1">
+                <label className="text-sm text-gray-300 flex items-center">
+                  <svg className="h-4 w-4 mr-1 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                  </svg>
+                  Zoom
+                </label>
+                <span className="text-xs font-mono bg-gray-700 px-2 py-0.5 rounded">
+                  {Math.round(viewSettings.scale * 100)}%
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => handleSettingChange('scale', Math.max(0.5, viewSettings.scale - 0.1))}
+                  className="p-1 bg-gray-700 rounded"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                  </svg>
+                </button>
+                <input
+                  type="range"
+                  min="0.5"
+                  max="2"
+                  step="0.05"
+                  value={viewSettings.scale}
+                  onChange={(e) => handleSettingChange('scale', parseFloat(e.target.value))}
+                  className="flex-1 accent-emerald-500 h-2 bg-gray-700 rounded appearance-none"
+                />
+                <button 
+                  onClick={() => handleSettingChange('scale', Math.min(2, viewSettings.scale + 0.1))}
+                  className="p-1 bg-gray-700 rounded"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12M6 12h12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Toggle para invertir colores */}
+            <div className="mb-4 flex items-center justify-between">
+              <label className="text-sm text-gray-300 flex items-center">
+                <svg className="h-4 w-4 mr-1 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
                 </svg>
-                Crear líneas
+                Invertir colores
+              </label>
+              <button 
+                onClick={() => handleSettingChange('invert', !viewSettings.invert)}
+                className={`w-12 h-6 rounded-full flex items-center transition-colors ${viewSettings.invert ? 'bg-emerald-500 justify-end' : 'bg-gray-600 justify-start'}`}
+              >
+                <span className="w-5 h-5 bg-white rounded-full m-0.5"></span>
               </button>
+            </div>
+
+            <div className="border-t border-gray-700 my-4 pt-4">
+              <h4 className="text-sm font-medium mb-3 text-gray-300">Otras herramientas</h4>
+              <div className="flex flex-col space-y-2">
+                <button
+                  onClick={handleAddNote}
+                  className="flex items-center px-3 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition text-sm"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 mr-2 text-emerald-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  Añadir notas
+                </button>
+                <button
+                  onClick={handleCreateLine}
+                  className="flex items-center px-3 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition text-sm"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 mr-2 text-emerald-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+                  </svg>
+                  Crear mediciones
+                </button>
+              </div>
             </div>
           </div>
         )}
