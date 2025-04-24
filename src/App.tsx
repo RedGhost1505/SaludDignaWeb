@@ -12,6 +12,7 @@ import Buttons from "./pages/UiElements/Buttons";
 import LineChart from "./pages/Charts/LineChart";
 import BarChart from "./pages/Charts/BarChart";
 import Calendar from "./pages/Calendar";
+import PatientRegistry from "./pages/PatientRegistry";
 import BasicTables from "./pages/Tables/BasicTables";
 import FormElements from "./pages/Forms/FormElements";
 import Blank from "./pages/Blank";
@@ -38,6 +39,8 @@ export default function App() {
             {/* Others Page */}
             <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />
+            <Route path="/patient-registry" element={<PatientRegistry />} />
+            {/* Pages */}
             <Route path="/blank" element={<Blank />} />
             <Route path="/search-patient" element={<PacientesSearch />} />
             <Route path="/new-report" element={<NewReport />} />
