@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router";
-import ThemeTogglerTwo from "../../components/common/ThemeTogglerTwo";
 
 export default function AuthLayout({ children }: {children: React.ReactNode;}) {
   return (
@@ -20,18 +19,17 @@ export default function AuthLayout({ children }: {children: React.ReactNode;}) {
             />
             
             <div className="flex flex-col items-center justify-center max-w-xs relative z-10 py-12">
-              <Link to="/" className="block mb-8">
-                <img
-                  width={231}
-                  height={48}
-                  src="/images/logo/auth-logo.svg"
-                  alt="SaludDigna Logo"
-                  className="w-48"
-                />
-              </Link>
               <h2 className="text-3xl font-bold text-white mb-4 text-center">
-                Bienvenido a SaludDigna
+                Bienvenido a
               </h2>
+                <Link to="/" className="block mb-8">
+                  <img
+                    width={350}
+                    src="/images/logo/SaludDignaLogo.png"
+                    alt="SaludDigna Logo"
+                    className="drop-shadow-lg contrast-200"
+                  />
+                </Link>
               <p className="text-center text-white/80">
                 Plataforma médica avanzada para la visualización y manipulación de estudios radiológicos
               </p>

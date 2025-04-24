@@ -8,23 +8,26 @@ const SaludDignaLanding: React.FC = () => {
   return (
 		<>
 			<PageMeta
-        title="Salud Digna | LandingPage"
-        description="Salud Digna Landing Page - Plataforma médica avanzada para la visualización y manipulación de estudios radiológicos."
-      />
+				title="Salud Digna | LandingPage"
+				description="Salud Digna Landing Page - Plataforma médica avanzada para la visualización y manipulación de estudios radiológicos."
+			/>
 			<div className="min-h-screen bg-[#f8fae1]">
 				{/* Header */}
 				<header className="bg-[#009975] text-white shadow-md">
 					<div className="container mx-auto px-5 py-5">
 						<nav className="flex justify-between items-center">
 							<div className="flex items-center text-2xl font-bold">
-								<img src="/api/placeholder/50/50" alt="SaludDigna Logo" className="w-12 mr-3" />
-								SaludDigna
+								<img 
+									width={200}
+									src="/images/logo/SaludDignaLogo.png" 
+									alt="SaludDigna Logo"  
+									className="drop-shadow-lg contrast-200"	
+								/>
 							</div>
 							<ul className="hidden md:flex items-center space-x-8">
-								<li><a href="#" className="hover:opacity-80 transition-opacity font-medium">Inicio</a></li>
 								<li><a href="#" className="hover:opacity-80 transition-opacity font-medium">Características</a></li>
 								<li><a href="#" className="hover:opacity-80 transition-opacity font-medium">Planes</a></li>
-								<li><a href="#" className="hover:opacity-80 transition-opacity font-medium">Contacto</a></li>
+								<li><a href="#" className="hover:opacity-80 transition-opacity font-medium">Nosotros</a></li>
 								<li>
 									<button 
 										onClick={() => navigate("/signin")}
@@ -61,7 +64,7 @@ const SaludDignaLanding: React.FC = () => {
 							href="#" 
 							className="inline-block bg-[#e98232] text-white px-5 py-3 rounded font-semibold transition-all hover:-translate-y-0.5 hover:shadow-md"
 						>
-							Prueba Gratuita
+							Comenzar ahora
 						</a>
 					</div>
 				</section>
@@ -137,23 +140,6 @@ const SaludDignaLanding: React.FC = () => {
 									className="max-w-full max-h-full"
 								/>
 							</div>
-							<div className="flex flex-wrap justify-center gap-4 mt-5">
-								<button className="bg-[#009975] text-white px-4 py-2 rounded hover:bg-[#e98232] transition-colors">
-									Zoom +
-								</button>
-								<button className="bg-[#009975] text-white px-4 py-2 rounded hover:bg-[#e98232] transition-colors">
-									Zoom -
-								</button>
-								<button className="bg-[#009975] text-white px-4 py-2 rounded hover:bg-[#e98232] transition-colors">
-									Contraste
-								</button>
-								<button className="bg-[#009975] text-white px-4 py-2 rounded hover:bg-[#e98232] transition-colors">
-									Brillo
-								</button>
-								<button className="bg-[#009975] text-white px-4 py-2 rounded hover:bg-[#e98232] transition-colors">
-									Medición
-								</button>
-							</div>
 						</div>
 					</div>
 				</section>
@@ -169,7 +155,7 @@ const SaludDignaLanding: React.FC = () => {
 						</p>
 						<a 
 							href="#" 
-							className="inline-block bg-[#e98232] text-white px-6 py-3 rounded font-semibold text-lg transition-all hover:-translate-y-0.5 hover:shadow-lg"
+							className="inline-block bg-[#e98232] text-white px-5 py-3 rounded font-semibold transition-all hover:-translate-y-0.5 hover:shadow-md"
 						>
 							Comenzar ahora
 						</a>
@@ -183,8 +169,7 @@ const SaludDignaLanding: React.FC = () => {
 							{/* Logo and Description - 3 columns */}
 							<div className="md:col-span-3">
 								<div className="flex items-center mb-4">
-									<img src="/api/placeholder/40/40" alt="SaludDigna Logo" className="w-10 h-10" />
-									<span className="ml-2 text-[#009975] font-bold text-xl">SaludDigna</span>
+									<img src="/images/logo/SaludDignaLogo.png" alt="SaludDigna Logo" />
 								</div>
 								<p className="text-gray-400 text-sm leading-relaxed">
 									Plataforma médica especializada en la visualización y manipulación de estudios radiológicos, diseñada 
@@ -200,8 +185,6 @@ const SaludDignaLanding: React.FC = () => {
 								<h4 className="text-[#8bc34a] font-medium mb-4">Producto</h4>
 								<ul className="space-y-2">
 									<li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Características</a></li>
-									<li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Planes y precios</a></li>
-									<li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Solicitar demo</a></li>
 									<li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Testimonios</a></li>
 								</ul>
 							</div>
@@ -211,7 +194,6 @@ const SaludDignaLanding: React.FC = () => {
 								<h4 className="text-[#8bc34a] font-medium mb-4">Soporte</h4>
 								<ul className="space-y-2">
 									<li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Documentación</a></li>
-									<li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Tutoriales</a></li>
 									<li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Preguntas frecuentes</a></li>
 									<li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Contacto</a></li>
 								</ul>

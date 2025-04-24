@@ -20,7 +20,7 @@ import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import SaludDignaLanding from "./pages/LandingPage";
-import PacientesSearch from "./pages/PacientesSearch";
+import PacientesSearch from "./pages/PatientSearch";
 import ChatBot from "./pages/ChatBot";
 import NewReport from "./pages/NewReport";
 
