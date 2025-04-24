@@ -34,12 +34,13 @@ export default function App() {
           {/* Dashboard Layout */}
           <Route path="/ChatBot" element={<ChatBot />} />
           <Route element={<AppLayout />}>
-            <Route index path="/dashboard" element={<Home />} />
+            <Route index path="/home" element={<Home />} />
 
             {/* Others Page */}
             <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/patient-registry" element={<PatientRegistry />} />
+            
             {/* Pages */}
             <Route path="/blank" element={<Blank />} />
             <Route path="/search-patient" element={<PacientesSearch />} />

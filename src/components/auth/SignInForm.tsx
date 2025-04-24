@@ -10,7 +10,7 @@ export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    navigate("/dashboard");
+    navigate("/home");
   };
 
   return (
