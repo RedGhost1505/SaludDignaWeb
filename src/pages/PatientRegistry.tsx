@@ -28,7 +28,7 @@ const PatientRegistry: React.FC = () => {
     return (
         <div>
             <PageMeta
-                title="Registro de Paciente | Salud Digna"
+                title="VisuMed | Registro de Paciente"
                 description="Formulario para registrar un nuevo paciente en el sistema."
             />
             <PageBreadcrumb pageTitle="Registro de Nuevo Paciente" />

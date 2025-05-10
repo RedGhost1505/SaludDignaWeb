@@ -2,14 +2,14 @@ import React from 'react';
 import { useNavigate } from "react-router";
 import PageMeta from "../components/common/PageMeta";
 
-const SaludDignaLanding: React.FC = () => {
+const VisuMedLanding: React.FC = () => {
 	const navigate = useNavigate();
 
   return (
 		<>
 			<PageMeta
-				title="Salud Digna | LandingPage"
-				description="Salud Digna Landing Page - Plataforma médica avanzada para la visualización y manipulación de estudios radiológicos."
+				title="VisuMed | LandingPage"
+				description="VisuMed Landing Page - Plataforma médica avanzada para la visualización y manipulación de estudios radiológicos."
 			/>
 			<div className="min-h-screen bg-[#f8fae1]">
 				{/* Header */}
@@ -19,8 +19,8 @@ const SaludDignaLanding: React.FC = () => {
 							<div className="flex items-center text-2xl font-bold">
 								<img 
 									width={200}
-									src="/images/logo/SaludDignaLogo.png" 
-									alt="SaludDigna Logo"  
+									src="/images/logo/VisuMedLogo.png" 
+									alt="VisuMed Logo"  
 									className="drop-shadow-lg contrast-200"	
 								/>
 							</div>
@@ -57,7 +57,7 @@ const SaludDignaLanding: React.FC = () => {
 							Visualiza y manipula radiografías con precisión y facilidad
 						</h1>
 						<p className="text-lg max-w-3xl mx-auto mb-10 text-[#333333]">
-							SaludDigna es la plataforma web avanzada para profesionales médicos que necesitan analizar,
+							VisuMed es la plataforma web avanzada para profesionales médicos que necesitan analizar,
 							manipular y compartir estudios radiológicos con herramientas intuitivas y potentes.
 						</p>
 						<a 
@@ -136,7 +136,7 @@ const SaludDignaLanding: React.FC = () => {
 							<div className="bg-[#f8fae1] rounded h-96 flex items-center justify-center">
 								<img 
 									src="/api/placeholder/800/500" 
-									alt="Demostración de SaludDigna" 
+									alt="Demostración de VisuMed" 
 									className="max-w-full max-h-full"
 								/>
 							</div>
@@ -151,7 +151,7 @@ const SaludDignaLanding: React.FC = () => {
 							¿Listo para revolucionar tu análisis radiológico?
 						</h2>
 						<p className="text-lg max-w-3xl mx-auto mb-10">
-							Únete a miles de profesionales médicos que ya optimizaron su flujo de trabajo con SaludDigna
+							Únete a miles de profesionales médicos que ya optimizaron su flujo de trabajo con VisuMed
 						</p>
 						<a 
 							href="#" 
@@ -169,7 +169,7 @@ const SaludDignaLanding: React.FC = () => {
 							{/* Logo and Description - 3 columns */}
 							<div className="md:col-span-3">
 								<div className="flex items-center mb-4">
-									<img src="/images/logo/SaludDignaLogo.png" alt="SaludDigna Logo" />
+									<img src="/images/logo/VisuMedLogo.png" alt="VisuMed Logo" />
 								</div>
 								<p className="text-gray-400 text-sm leading-relaxed">
 									Plataforma médica especializada en la visualización y manipulación de estudios radiológicos, diseñada 
@@ -211,7 +211,7 @@ const SaludDignaLanding: React.FC = () => {
 						</div>
 						
 						<div className="mt-12 pt-6 border-t border-gray-700">
-							<p className="text-gray-500 text-center text-sm">&copy; 2025 SaludDigna. Todos los derechos reservados.</p>
+							<p className="text-gray-500 text-center text-sm">&copy; 2025 VisuMed. Todos los derechos reservados.</p>
 						</div>
 					</div>
 				</footer>
@@ -220,4 +220,4 @@ const SaludDignaLanding: React.FC = () => {
   );
 };
 
-export default SaludDignaLanding;
+export default VisuMedLanding;

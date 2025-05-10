@@ -45,7 +45,7 @@ const PacientesSearch: React.FC = () => {
   return (
     <>
       <PageMeta
-        title="Salud Digna | Buscar pacientes"
+        title="VisuMed | Buscar pacientes"
         description="Buscador de pacientes para médicos"
       />
       <PageBreadcrumb pageTitle="Buscador de Pacientes" />

@@ -6,8 +6,8 @@ export default function SignIn() {
   return (
     <>
       <PageMeta
-        title="SaludDigna | Inicio de sesión"
-        description="Inicia sesión en tu cuenta de Salud Digna"
+        title="VisuMed | Inicio de sesión"
+        description="Inicia sesión en tu cuenta de VisuMed"
       />
       <AuthLayout>
         <SignInForm />

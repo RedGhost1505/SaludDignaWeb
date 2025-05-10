@@ -19,7 +19,7 @@ import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
-import SaludDignaLanding from "./pages/LandingPage";
+import VisuMedLanding from "./pages/LandingPage";
 import PacientesSearch from "./pages/PatientSearch";
 import ChatBot from "./pages/ChatBot";
 import NewReport from "./pages/NewReport";
@@ -69,7 +69,7 @@ export default function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
 
-          <Route path="/" element={<SaludDignaLanding />} />
+          <Route path="/" element={<VisuMedLanding />} />
 
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />

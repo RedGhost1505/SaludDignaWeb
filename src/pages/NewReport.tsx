@@ -87,7 +87,7 @@ export default function NewReport() {
   return (
     <>
       <PageMeta
-        title="Salud Digna | Nuevo Reporte"
+        title="VisuMed | Nuevo Reporte"
         description="Generación de nuevo reporte médico - Plataforma médica avanzada"
       />
       <PageBreadcrumb pageTitle="Registro de Nuevo Reporte" />
